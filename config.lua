@@ -39,7 +39,7 @@ Config = {
     -- You can disable the Walking Styles menu here.
     WalkingStylesEnabled = true,
     -- You can disable the Adult Emotes here.
-    AdultEmotesDisabled = false,
+    AdultEmotesDisabled = true,
     -- You can disable the Shared Emotes here.
     SharedEmotesEnabled = true,
     CheckForUpdates = true,
@@ -48,7 +48,7 @@ Config = {
     -- If you don't like gta notifications, you can disable them here to have messages in the chat.
     NotificationsAsChatMessage = false,
     -- Used for few framework dependent things. Accepted values: "qb-core", false
-    Framework = false,
+    Framework = "qb-core",
 }
 
 Config.KeybindKeys = {
