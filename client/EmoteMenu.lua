@@ -37,6 +37,18 @@ function ShowNotification(text)
     end
 end
 
+-- Clear all the animal emotes if disabled.
+if not Config.AnimalEmotesEnabled then
+    DP.AnimalEmotes = {}
+    for k, v in pairs(DP) do
+        for i, j in pairs(v) do
+            if j.AnimalEmote then
+                DP[k][i] = nil
+            end
+        end
+    end
+end
+
 local EmoteTable = {}
 local FavEmoteTable = {}
 local KeyEmoteTable = {}
@@ -71,12 +83,19 @@ lang = Config.MenuLanguage
 
 function AddEmoteMenu(menu)
     local submenu = _menuPool:AddSubMenu(menu, Config.Languages[lang]['emotes'], "", "", Menuthing, Menuthing)
+    if Config.Search then
+        submenu:AddItem(NativeUI.CreateItem(Config.Languages[lang]['searchemotes'], ""))
+        table.insert(EmoteTable, Config.Languages[lang]['searchemotes'])
+    end
     local dancemenu = _menuPool:AddSubMenu(submenu, Config.Languages[lang]['danceemotes'], "", "", Menuthing, Menuthing)
-    local animalmenu = _menuPool:AddSubMenu(submenu, Config.Languages[lang]['animalemotes'], "", "", Menuthing, Menuthing)
+    local animalmenu
+    if Config.AnimalEmotesEnabled then
+        animalmenu = _menuPool:AddSubMenu(submenu, Config.Languages[lang]['animalemotes'], "", "", Menuthing, Menuthing)
+        table.insert(EmoteTable, Config.Languages[lang]['animalemotes'])
+    end
     local propmenu = _menuPool:AddSubMenu(submenu, Config.Languages[lang]['propemotes'], "", "", Menuthing, Menuthing)
     table.insert(EmoteTable, Config.Languages[lang]['danceemotes'])
     table.insert(EmoteTable, Config.Languages[lang]['danceemotes'])
-    table.insert(EmoteTable, Config.Languages[lang]['animalemotes'])
 
     if Config.SharedEmotesEnabled then
         sharemenu = _menuPool:AddSubMenu(submenu, Config.Languages[lang]['shareemotes'],
@@ -131,13 +150,15 @@ function AddEmoteMenu(menu)
         end
     end
 
-    for a, b in pairsByKeys(DP.AnimalEmotes) do
-        x, y, z = table.unpack(b)
-        animalitem = NativeUI.CreateItem(z, "/e (" .. a .. ")")
-        animalmenu:AddItem(animalitem)
-        table.insert(AnimalTable, a)
-        if not Config.SqlKeybinding then
-            favEmotes[a] = z
+    if Config.AnimalEmotesEnabled then
+        for a, b in pairsByKeys(DP.AnimalEmotes) do
+            x, y, z = table.unpack(b)
+            animalitem = NativeUI.CreateItem(z, "/e (" .. a .. ")")
+            animalmenu:AddItem(animalitem)
+            table.insert(AnimalTable, a)
+            if not Config.SqlKeybinding then
+                favEmotes[a] = z
+            end
         end
     end
 
@@ -193,8 +214,10 @@ function AddEmoteMenu(menu)
         EmoteMenuStart(DanceTable[index], "dances")
     end
 
-    animalmenu.OnItemSelect = function(sender, item, index)
-        EmoteMenuStart(AnimalTable[index], "animals")
+    if Config.AnimalEmotesEnabled then
+        animalmenu.OnItemSelect = function(sender, item, index)
+            EmoteMenuStart(AnimalTable[index], "animals")
+        end
     end
 
     if Config.SharedEmotesEnabled then
@@ -228,8 +251,148 @@ function AddEmoteMenu(menu)
     end
 
     submenu.OnItemSelect = function(sender, item, index)
-        if EmoteTable[index] ~= Config.Languages[lang]['favoriteemotes'] then
+        if Config.Search and EmoteTable[index] == Config.Languages[lang]['searchemotes'] then
+            EmoteMenuSearch(submenu)
+        elseif EmoteTable[index] ~= Config.Languages[lang]['favoriteemotes'] then
             EmoteMenuStart(EmoteTable[index], "emotes")
+        end
+    end
+end
+
+if Config.Search then
+    local ignoredCategories = {
+        ["Walks"] = true,
+        ["Expressions"] = true,
+        ["Shared"] = not Config.SharedEmotesEnabled
+    }
+
+    function EmoteMenuSearch(lastMenu)
+        local favEnabled = not Config.SqlKeybinding and Config.FavKeybindEnabled
+        AddTextEntry("PM_NAME_CHALL", Config.Languages[lang]['searchinputtitle'])
+        DisplayOnscreenKeyboard(1, "PM_NAME_CHALL", "", "", "", "", "", 30)
+        while UpdateOnscreenKeyboard() == 0 do
+            DisableAllControlActions(0)
+            Wait(100)
+        end
+        local input = GetOnscreenKeyboardResult()
+        if input ~= nil then
+            local results = {}
+            for k, v in pairs(DP) do
+                if not ignoredCategories[k] then
+                    for a, b in pairs(v) do
+                        if string.find(string.lower(a), string.lower(input)) or (b[3] ~= nil and string.find(string.lower(b[3]), string.lower(input))) then
+                            table.insert(results, {table = k, name = a, data = b})
+                        end
+                    end
+                end
+            end
+
+            if #results > 0 then
+                local searchMenu = _menuPool:AddSubMenu(lastMenu, string.format(Config.Languages[lang]['searchmenudesc'], #results, input), "", true, Menuthing, Menuthing)
+                local sharedDanceMenu
+                if favEnabled then
+                    local rFavorite = NativeUI.CreateItem(Config.Languages[lang]['rfavorite'], Config.Languages[lang]['rfavorite'])
+                    searchMenu:AddItem(rFavorite)
+                end
+
+                if Config.SharedEmotesEnabled then
+                    sharedDanceMenu = _menuPool:AddSubMenu(searchMenu, Config.Languages[lang]['sharedanceemotes'], "", true, Menuthing, Menuthing)
+                end
+
+                table.sort(results, function(a, b) return a.name < b.name end)
+                for k, v in pairs(results) do
+                    local desc = ""
+                    if v.table == "Shared" then
+                        local otheremotename = v.data[4]
+                        if otheremotename == nil then
+                           desc = "/nearby (~g~" .. v.name .. "~w~)"
+                        else
+                           desc = "/nearby (~g~" .. v.name .. "~w~) " .. Config.Languages[lang]['makenearby'] .. " (~y~" .. otheremotename .. "~w~)"
+                        end
+                    else
+                        desc = "/e (" .. v.name .. ")" .. (favEnabled and "\n" .. Config.Languages[lang]['searchshifttofav'] or "")
+                    end
+
+                    local item = NativeUI.CreateItem(v.data[3], desc)
+                    searchMenu:AddItem(item)
+                    if v.table == "Dances" and Config.SharedEmotesEnabled then
+                        local item2 = NativeUI.CreateItem(v.data[3], "")
+                        sharedDanceMenu:AddItem(item2)
+                    end
+                end
+
+                if favEnabled then
+                    table.insert(results, 1, Config.Languages[lang]['rfavorite'])
+                end
+
+                searchMenu.OnItemSelect = function(sender, item, index)
+                    local data = results[index]
+
+                    if data == Config.Languages[lang]['sharedanceemotes'] then return end
+                    if data == Config.Languages[lang]['rfavorite'] then 
+                        FavoriteEmote = ""
+                        ShowNotification(Config.Languages[lang]['rfavorite'], 2000)
+                        return 
+                    end
+
+                    if favEnabled and IsControlPressed(0, 21) then
+                        if data.table ~= "Shared" then
+                            FavoriteEmote = data.name
+                            ShowNotification("~o~" .. firstToUpper(data.name) .. Config.Languages[lang]['newsetemote'])
+                        else
+                            SimpleNotify(Config.Languages[lang]['searchcantsetfav'])
+                        end
+                    elseif data.table == "Emotes" or data.table == "Dances" then
+                        EmoteMenuStart(data.name, string.lower(data.table))
+                    elseif data.table == "PropEmotes" then
+                        EmoteMenuStart(data.name, "props")
+                    elseif data.table == "AnimalEmotes" then
+                        EmoteMenuStart(data.name, "animals")
+                    elseif data.table == "Shared" then
+                        target, distance = GetClosestPlayer()
+                        if (distance ~= -1 and distance < 3) then
+                            _, _, rename = table.unpack(DP.Shared[data.name])
+                            TriggerServerEvent("ServerEmoteRequest", GetPlayerServerId(target), data.name)
+                            SimpleNotify(Config.Languages[lang]['sentrequestto'] .. GetPlayerName(target))
+                        else
+                            SimpleNotify(Config.Languages[lang]['nobodyclose'])
+                        end   
+                    end
+                end
+
+                if Config.SharedEmotesEnabled then
+                    if #sharedDanceMenu.Items > 0 then
+                        table.insert(results, (favEnabled and 2 or 1), Config.Languages[lang]['sharedanceemotes'])
+                        sharedDanceMenu.OnItemSelect = function(sender, item, index)
+                            local data = results[index]
+                            target, distance = GetClosestPlayer()
+                            if (distance ~= -1 and distance < 3) then
+                                _, _, rename = table.unpack(DP.Dances[data.name])
+                                TriggerServerEvent("ServerEmoteRequest", GetPlayerServerId(target), data.name, 'Dances')
+                                SimpleNotify(Config.Languages[lang]['sentrequestto'] .. GetPlayerName(target))
+                            else
+                                SimpleNotify(Config.Languages[lang]['nobodyclose'])
+                            end
+                        end
+                    else
+                        sharedDanceMenu:Clear()
+                        searchMenu:RemoveItemAt((favEnabled and 2 or 1))
+                    end
+                end
+
+                searchMenu.OnMenuClosed = function()
+                    searchMenu:Clear()
+                    lastMenu:RemoveItemAt(#lastMenu.Items)
+                    _menuPool:RefreshIndex()
+                    results = {}
+                end
+
+                _menuPool:RefreshIndex()
+                _menuPool:CloseAllMenus()
+                searchMenu:Visible(true)
+            else
+                SimpleNotify(string.format(Config.Languages[lang]['searchnoresult'], input))
+            end
         end
     end
 end
@@ -329,6 +492,8 @@ function AddInfoMenu(menu)
         "<font color=\"#37DA00\">BzZzi</font> for the custom food props 🍩."))
     infomenu:AddItem(NativeUI.CreateItem("Thanks <font color=\"#C40A7D\">Natty3d</font>",
         "<font color=\"#C40A7D\">Natty3d</font> for the custom lollipop props 🍭."))
+    infomenu:AddItem(NativeUI.CreateItem("Thanks <font color=\"#189FD0\">northsqrd</font>",
+        "<font color=\"#189FD0\">northsqrd</font> for the search feature 🔎."))
 
     infomenu:AddItem(NativeUI.CreateItem("Thanks to the community", "Translations, bug reports and moral support 🌐"))
 end

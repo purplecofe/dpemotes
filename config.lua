@@ -23,7 +23,7 @@ Config = {
     -- Use a 512 x 128 image!
     -- Note this might cause an issue of the image getting stuck on peoples screens
     CustomMenuEnabled = true,
-    MenuImage = "https://i.imgur.com/IRzHWb3.png", ----[Custom banner imgur URLs go here ]---
+    MenuImage = "https://i.imgur.com/ghf970b.jpg", ----[Custom banner imgur URLs go here ]---
     -- You can change the menu image by pasting a link above. It must be the same width and length
     -- You can change the name of the menu here.
     MenuTitle = "DpEmotes V2",
@@ -49,6 +49,10 @@ Config = {
     NotificationsAsChatMessage = false,
     -- Used for few framework dependent things. Accepted values: "qb-core", false
     Framework = "qb-core",
+    -- Used to enable or disable the search feature in the menu.
+    Search = true,
+    -- You can disable the Animal Emotes here.
+    AnimalEmotesEnabled = true,
 }
 
 Config.KeybindKeys = {
@@ -109,7 +113,13 @@ Config.Languages = {
         ['currentlyboundemotes'] = " Currently bound emotes:",
         ['notvalidkey'] = "is not a valid key.",
         ['keybinds'] = "🔢 Keybinds",
-        ['keybindsinfo'] = "Use"
+        ['keybindsinfo'] = "Use",
+        ['searchemotes'] = "🔍 Search for Emotes",
+        ['searchinputtitle'] = "Search:",
+        ['searchmenudesc'] = "%s result(s) for '~r~%s~w~':",
+        ['searchnoresult'] = "No results for search '~r~%s~w~'.",
+        ['searchshifttofav'] = "Hold L-Shift and press enter to set as favorite.",
+        ['searchcantsetfav'] = "Shared emotes cannot be set as favorites."
     },
     ['cs'] = { -- Czech 🇨🇿
         ['emotes'] = 'Animace 🎬',
@@ -159,7 +169,13 @@ Config.Languages = {
         ['currentlyboundemotes'] = "Momentálně nastavené animace:",
         ['notvalidkey'] = "Není platná klávesa.",
         ['keybinds'] = "🔢 Klávesové Zkratky",
-        ['keybindsinfo'] = "Use"
+        ['keybindsinfo'] = "Use",
+	['searchemotes'] = "🔍 Vyhledat animace",
+	['searchinputtitle'] = "Vyhledáno:",
+	['searchmenudesc'] = "%s výsledek pro '~r~%s~w~':",
+	['searchnoresult'] = "Žádna animace nebyla nalezena '~r~%s~w~'.",
+	['searchshifttofav'] = "Podrž L-Shift a stiskni enter pro nastavení animace do oblíbeních.",
+	['searchcantsetfav'] = "Sdílené animace nelze nastavit jako oblíbené."
     },
     ['fr'] = { -- French 🇫🇷
         ['emotes'] = 'Emotes 🎬',
@@ -208,7 +224,13 @@ Config.Languages = {
         ['currentlyboundemotes'] = " Emotes actuellement liées:",
         ['notvalidkey'] = "n'est pas une clé valide.",
         ['keybinds'] = "🔢 Raccourcis clavier",
-        ['keybindsinfo'] = "Utilise"
+        ['keybindsinfo'] = "Utilise",
+		['searchemotes'] = "🔍 Rechercher des emotes",
+		['searchinputtitle'] = "Recherche:",
+		['searchmenudesc'] = "%s resultat(s) pour '~r~%s~w~':",
+		['searchnoresult'] = "Aucun résultat pour la recherche : '~r~%s~w~'.",
+		['searchshifttofav'] = "Maintenir  L-Shift et appuyer sur entrer pour marquer comme favorie.",
+		['searchcantsetfav'] = "Les emotes partagées ne peuvent pas être mise en favorie."
     },
     ['de'] = { -- German 🇩🇪
         ['emotes'] = 'Emotes 🎬',
@@ -257,7 +279,13 @@ Config.Languages = {
         ['currentlyboundemotes'] = " Derzeit gebundene Emotes:",
         ['notvalidkey'] = "ist kein gültiger Schlüssel.",
         ['keybinds'] = "🔢 Tastenkombinationen",
-        ['keybindsinfo'] = "verwenden"
+        ['keybindsinfo'] = "verwenden",
+		['searchemotes'] = "🔍 Suche nach Bestimmten Emotes",
+        ['searchinputtitle'] = "Suche:",
+        ['searchmenudesc'] = "%s Ergebnis(se) für '~r~%s~w~':",
+        ['searchnoresult'] = "Es wurden keine Ergebnisse gefunden für '~r~%s~w~'.",
+        ['searchshifttofav'] = "Halte L-Shift und drücke Enter um den Emote als Favorit zu setzen.",
+        ['searchcantsetfav'] = "Geteilte Emotes können nicht als Favorit gesetzt werden."
     },
     ['sv'] = { -- Swedish 🇸🇪
         ['emotes'] = 'Emotes 🎬',
@@ -307,7 +335,13 @@ Config.Languages = {
         ['currentlyboundemotes'] = " För närvarande bundna emotes:",
         ['notvalidkey'] = "är inte en giltig tangent.",
         ['keybinds'] = "🔢 Keybinds",
-        ['keybindsinfo'] = "Använd"
+        ['keybindsinfo'] = "Använd",
+        ['searchemotes'] = "🔍 Sök Emotes",
+        ['searchinputtitle'] = "Sök:",
+		['searchmenudesc'] = "%s resultat på '~r~%s~w~':",
+		['searchnoresult'] = "Inga resultat hittades på '~r~%s~w~'.",
+		['searchshifttofav'] = "Håll ned L-Shift och tryck på enter för att ställa in som favorit.",
+		['searchcantsetfav'] = "Delade Emotes kan inte ställas in som favoriter."
     },
     ['es'] = { -- Spanish 🇪🇸
         ['emotes'] = "Animaciones 🎬",
@@ -356,7 +390,13 @@ Config.Languages = {
         ['currentlyboundemotes'] = " Emotes vinculados actualmente:",
         ['notvalidkey'] = "no es una clave válida.",
         ['keybinds'] = "🔢 Keybinds",
-        ['keybindsinfo'] = "Utilizar"
+        ['keybindsinfo'] = "Utilizar",
+		['searchemotes'] = "🔍 Busca animaciones",
+		['searchinputtitle'] = "Buscar:",
+		['searchmenudesc'] = "%s resultado(s) para '~r~%s~w~':",
+		['searchnoresult'] = "No se encontró nada con '~r~%s~w~'.",
+		['searchshifttofav'] = "Mantén L-Shift y presiona Enter para guardar como favorito.",
+		['searchcantsetfav'] = "Animaciones compartidas no pueden ser guardadas como favoritas."
     },
     ['nl'] = { -- Dutch 🇳🇱
         ['emotes'] = 'Animaties 🎬',
@@ -406,7 +446,13 @@ Config.Languages = {
         ['currentlyboundemotes'] = " Huidig gebonden animaties:",
         ['notvalidkey'] = "Is geen geldige knop.",
         ['keybinds'] = "🔢 Keybinds",
-        ['keybindsinfo'] = "Gebruik"
+        ['keybindsinfo'] = "Gebruik",
+		['searchemotes'] = "🔍 Zoeken naar emotes",
+		['searchinputtitle'] = "Zoeken:",
+		['searchmenudesc'] = "%s Resultaat(s) voor'~r~%s~w~':",
+		['searchnoresult'] = "Geen resultaat voor zoekopdracht '~r~%s~w~'.",
+		['searchshifttofav'] = "Houd L-Shift ingedrukt en druk enter om als favoriet op te slaan.",
+		['searchcantsetfav'] = "Gedeelde emotes kunnen niet als favoriet worden ingesteld."
     },
     ['pt'] = { -- Brazilian Portuguese 🇧🇷
         ['emotes'] = 'Emotes 🎬',
@@ -456,7 +502,13 @@ Config.Languages = {
         ['currentlyboundemotes'] = "Emotes atualmente vinculados: ",
         ['notvalidkey'] = "isto não é uma chave válida",
         ['keybinds'] = "🔢 Keybinds",
-        ['keybindsinfo'] = "Usar"
+        ['keybindsinfo'] = "Usar",
+		['searchemotes'] = "🔍 Search for Emotes",
+        ['searchinputtitle'] = "Search:",
+        ['searchmenudesc'] = "%s result(s) for '~r~%s~w~':",
+        ['searchnoresult'] = "No results for search '~r~%s~w~'.",
+        ['searchshifttofav'] = "Hold L-Shift and press enter to set as favorite.",
+        ['searchcantsetfav'] = "Shared emotes cannot be set as favorites."
     },
     ['it'] = { -- Italian 🇮🇹
         ['emotes'] = 'Animazioni 🎬',
@@ -506,7 +558,13 @@ Config.Languages = {
         ['currentlyboundemotes'] = " Animazioni correnti:",
         ['notvalidkey'] = "non è una chiave valida.",
         ['keybinds'] = "🔢 Tasti",
-        ['keybindsinfo'] = "Utilizza"
+        ['keybindsinfo'] = "Utilizza",
+		['searchemotes'] = "🔍 Search for Emotes",
+        ['searchinputtitle'] = "Search:",
+        ['searchmenudesc'] = "%s result(s) for '~r~%s~w~':",
+        ['searchnoresult'] = "No results for search '~r~%s~w~'.",
+        ['searchshifttofav'] = "Hold L-Shift and press enter to set as favorite.",
+        ['searchcantsetfav'] = "Shared emotes cannot be set as favorites."
     },
     ['da'] = { -- Danish 🇩🇰
         ['emotes'] = 'Animationer',
@@ -556,7 +614,14 @@ Config.Languages = {
         ['currentlyboundemotes'] = " Keybind animationer:",
         ['notvalidkey'] = "er ikke en gyldigt nøgle.",
         ['keybinds'] = "🔢 Keybinds",
-        ['keybindsinfo'] = "Brug"
+        ['keybindsinfo'] = "Brug",
+		['searchemotes'] = "🔍 Søg efter Emote",
+		['searchinputtitle'] = "Søg:",
+		['searchmenudesc'] = "%s resultat(er) for '~r~%s~w~':",
+		['searchnoresult'] = "Ingen resultater fundet med '~r~%s~w~'.",
+		['searchshifttofav'] = "Hold L-Shift og tryk enter for at sætte som favorit.",
+		['searchcantsetfav'] = "Delte emotes kan ikke være favoritter." 
+
     },
     ['fi'] = { -- Finnish 🇫🇮
         ['emotes'] = 'Animaatiot 🎬',
@@ -607,6 +672,12 @@ Config.Languages = {
         ['notvalidkey'] = "ei ole käytettävä näppäin.",
         ['keybinds'] = "🔢 Pikanäppäimet",
         ['keybindsinfo'] = "Käytä",
+		['searchemotes'] = "🔍 Etsiäksesi emoten",
+		['searchinputtitle'] = "Etsi:",
+		['searchmenudesc'] = "%s tulokset '~r~%s~w~':",
+		['searchnoresult'] = "Ei tuloksia haulle '~r~%s~w~'.",
+		['searchshifttofav'] = "Pidä L-Shift painettuna ja aseta suosikiksi painamalla Enter.",
+		['searchcantsetfav'] = "Jaettuja emoteita ei voi asettaa suosikiksi."
     },
     ['pl'] = { -- Polish 🇵🇱
         ['emotes'] = 'Animacje 🎬',
@@ -656,7 +727,13 @@ Config.Languages = {
         ['currentlyboundemotes'] = " Aktualnie przypisane animacje:",
         ['notvalidkey'] = "nie jest poprawnym klawiszem.",
         ['keybinds'] = "🔢 Przypisane klawisze",
-        ['keybindsinfo'] = "Użyj"
+        ['keybindsinfo'] = "Użyj",
+		['searchemotes'] = "🔍 Szukaj animacji",
+		['searchinputtitle'] = "Szukaj:",
+		['searchmenudesc'] = "%s wyników dla frazy '~r~%s~w~':",
+		['searchnoresult'] = "Brak wyników dla frazy '~r~%s~w~'.",
+		['searchshifttofav'] = "Przytrzymaj L-Shift i naciśnij Enter by dodać do ulubionych.",
+		['searchcantsetfav'] = "Współdzielona animacja nie może być dodana do ulubionych."
     },
     ['ro'] = { -- Romana 🇷🇴
         ['emotes'] = 'Emote-uri 🎬',
@@ -706,6 +783,12 @@ Config.Languages = {
         ['currentlyboundemotes'] = " Emote-uri prezent binduite:",
         ['notvalidkey'] = "nu este o tasta valida.",
         ['keybinds'] = "🔢 Bind-uri",
-        ['keybindsinfo'] = "Foloseste"
+        ['keybindsinfo'] = "Foloseste",
+		['searchemotes'] = "🔍 Cautare Emote-uri",
+        ['searchinputtitle'] = "Cautare:",
+        ['searchmenudesc'] = "%s rezultat(e) pentru '~r~%s~w~':",
+        ['searchnoresult'] = "Fara rezultate pentru cautarea '~r~%s~w~'.",
+        ['searchshifttofav'] = "Tine apasat L-Shift si apasa enter pentru a seta ca favorit.",
+        ['searchcantsetfav'] = "Emote-urile Shared nu pot fi setate ca favorite."
     },
 }

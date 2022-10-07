@@ -694,7 +694,8 @@ DP.Shared = {
         AnimationOptions = {
             EmoteMoving = true,
             EmoteLoop = true,
-        }
+        },
+        AnimalEmote = true,
     },
     ["csdog2"] = { -- Emote by MissSnowie
         "misssnowie@little_doggy_lying_down",
@@ -711,7 +712,8 @@ DP.Shared = {
             xRot = 0.0,
             yRot = 0.0,
             zRot = 80.0,
-        }
+        },
+        AnimalEmote = true,
     },
     ["csdog3"] = { -- Custom Emote by MissSnowie
         "hooman@hugging_little_doggy",
@@ -721,7 +723,8 @@ DP.Shared = {
         AnimationOptions = {
             EmoteMoving = true,
             EmoteLoop = true,
-        }
+        },
+        AnimalEmote = true,
     },
     ["csdog4"] = { -- Custom Emote by MissSnowie
         "little_doggy@hugging_hooman",
@@ -739,7 +742,8 @@ DP.Shared = {
             xRot = 3.70,
             yRot = 75.00,
             zRot = -161.90,
-        }
+        },
+        AnimalEmote = true,
     },
     ["cbdog"] = {
         "anim@heists@box_carry@",
@@ -749,7 +753,8 @@ DP.Shared = {
         AnimationOptions = {
             EmoteMoving = true,
             EmoteLoop = true,
-        }
+        },
+        AnimalEmote = true,
     },
     ["cbdog2"] = {
         "creatures@rottweiler@amb@sleep_in_kennel@",
@@ -766,7 +771,8 @@ DP.Shared = {
             xRot = 0.0,
             yRot = 0.0,
             zRot = -100.00,
-        }
+        },
+        AnimalEmote = true,
     },
     ["pback"] = {
         "anim@arena@celeb@flat@paired@no_props@",
@@ -1487,10 +1493,10 @@ DP.Dances = {
             EmoteLoop = true,
         }
     },
-    ["dancesilly9"] = {
+    ["dancesilly1"] = {
         "rcmnigel1bnmt_1b",
         "dance_loop_tyler",
-        "Dance Silly 9",
+        "Dance Silly 1",
         AnimationOptions = {
             EmoteLoop = true,
         }
@@ -1746,10 +1752,10 @@ DP.Dances = {
             EmoteMoving = false,
         }
     },
-    ["dj5"] = {
+    ["dj1"] = {
         "anim@amb@nightclub@djs@dixon@",
         "dixn_end_dix",
-        "DJ 5",
+        "DJ 1",
         AnimationOptions = {
             EmoteLoop = true,
             EmoteMoving = false,
@@ -2039,10 +2045,10 @@ DP.Dances = {
             EmoteMoving = false,
         }
     },
-    ["dancepridec"] = {
+    ["dancepridea"] = {
         "anim@amb@nightclub@lazlow@hi_railing@",
         "ambclub_09_mi_hi_bellydancer_laz",
-        "Dance Pride C - Bisexual",
+        "Dance Pride A - Bisexual",
         AnimationOptions = {
             Prop = 'lilprideflag3', -- Bisexual
             PropBone = 18905,
