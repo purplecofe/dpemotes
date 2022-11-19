@@ -1,4 +1,5 @@
 function WalkMenuStart(name)
+    if Config.PersistentWalk then SetResourceKvp("walkstyle", name) end
     RequestWalking(name)
     SetPedMovementClipset(PlayerPedId(), name, 0.2)
     RemoveAnimSet(name)
@@ -40,4 +41,14 @@ end
 
 function tableHasKey(table, key)
     return table[key] ~= nil
+end
+
+if Config.WalkingStylesEnabled and Config.PersistentWalk then
+    AddEventHandler('playerSpawned', function()
+        local kvp = GetResourceKvpString("walkstyle")
+
+        if kvp ~= nil then
+            WalkMenuStart(kvp)
+        end
+    end)
 end
